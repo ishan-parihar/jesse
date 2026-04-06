@@ -1,0 +1,35 @@
+[tool.poetry]
+name = "jesse-trading-agent"
+version = "0.1.0"
+description = "Jesse — Autonomous AI Trading Agent (LangChain ReAct)"
+authors = ["MT5-mcp R&D <devnull@example.com>"]
+readme = "README.md"
+packages = [{ include = "jesse", from = "src" }]
+
+[tool.poetry.dependencies]
+python = ">=3.11,<3.15"
+langgraph = "^0.2.0"
+langchain-openai = "^0.3.0"
+apscheduler = "^3.10.0"
+lancedb = "^0.30.0"
+ollama = "^0.6.0"
+typer = "^0.12.0"
+croniter = "^3.0.0"
+httpx = "^0.27.0"
+fastapi = "^0.110.0"
+uvicorn = {version = "^0.27.0", extras = ["standard"]}
+pydantic = "^2.6.0"
+structlog = "^24.1.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.0.0"
+pytest-asyncio = "^0.23.0"
+ruff = "^0.3.0"
+black = "^24.2.0"
+
+[tool.poetry.scripts]
+jesse = "apps.jesse_cli:run"
+
+[build-system]
+requires = ["poetry-core>=1.8.0"]
+build-backend = "poetry.core.masonry.api"

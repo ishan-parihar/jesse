@@ -1,0 +1,25 @@
+# HEARTBEAT.md
+
+## Purpose
+This file is read by the heartbeat runner on every cycle. Use it to:
+- Override the default heartbeat prompt for this deployment
+- Add persistent instructions that survive agent restarts
+- Document operational notes specific to this environment
+
+## Format
+Write free-form instructions below. The full content is appended to the
+heartbeat prompt on every LLM turn.
+
+## Examples
+- "Focus on XAUUSD this week — high volatility expected"
+- "Review all open positions before suggesting new trades"
+- "Weekend mode: only scan BTCUSD and ETHUSD"
+- "Risk-off: reduce position sizes by 50%"
+
+## Notes
+- Leave this file empty to skip the heartbeat cycle entirely
+- Edits take effect on the next heartbeat (no restart needed)
+- Lines starting with `#` are treated as markdown headers, not comments
+
+---
+<!-- Write your custom heartbeat instructions below this line -->

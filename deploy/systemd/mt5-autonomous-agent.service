@@ -1,0 +1,39 @@
+[Unit]
+Description=MT5-MCP Autonomous Trading Agent (Jesse)
+Documentation=file:///home/ishanp/Documents/GitHub/MT5-mcp/ARCHITECTURE.md
+After=network.target mt5-mcp-server.service mt5-tcp-bridge.service mt5-http-gateway.service
+Wants=mt5-mcp-server.service mt5-tcp-bridge.service mt5-http-gateway.service
+StartLimitIntervalSec=600
+StartLimitBurst=10
+
+[Service]
+Type=simple
+User=%USER%
+Group=%USER%
+WorkingDirectory=/home/ishanp/Documents/GitHub/MT5-mcp
+
+EnvironmentFile=/home/ishanp/Documents/GitHub/MT5-mcp/.env
+Environment=PYTHONUNBUFFERED=1
+Environment=PYTHONPATH=/home/ishanp/Documents/GitHub/MT5-mcp/src
+Environment=MT5_MCP_URL=http://127.0.0.1:8010
+
+ExecStartPre=/home/ishanp/Documents/GitHub/MT5-mcp/scripts/jesse-preflight.sh
+ExecStart=/home/ishanp/Documents/GitHub/MT5-mcp/.venv/bin/python -m apps.autonomous_agent.main
+
+Restart=always
+RestartSec=10
+RuntimeMaxSec=86400
+SuccessExitStatus=143
+
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=jesse-agent
+
+ReadWritePaths=/home/ishanp/.mt5-mcp /home/ishanp/Documents/GitHub/MT5-mcp
+PrivateTmp=true
+
+MemoryMax=2G
+CPUQuota=50%
+
+[Install]
+WantedBy=multi-user.target
