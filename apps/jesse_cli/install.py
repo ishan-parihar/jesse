@@ -11,7 +11,7 @@ install_app = typer.Typer(help="Install systemd services and dependencies")
 @install_app.command("service")
 def install_service():
     """Install systemd service for Jesse agent."""
-    service_file = PROJECT_DIR / "deploy" / "systemd" / "mt5-autonomous-agent.service"
+    service_file = PROJECT_DIR / "deploy" / "systemd" / "jesse-agent.service"
     if not service_file.exists():
         typer.echo(f"Service file not found: {service_file}")
         raise typer.Exit(1)
@@ -36,7 +36,7 @@ def install_service():
         subprocess.run(["sudo", "systemctl", "daemon-reload"], check=True)
         subprocess.run(["sudo", "systemctl", "enable", SYSTEMD_SERVICE], check=True)
         typer.echo(f"Service installed: {SYSTEMD_SERVICE}")
-        typer.echo("Start with: sudo systemctl start mt5-autonomous-agent")
+        typer.echo("Start with: sudo systemctl start jesse-agent")
     except subprocess.CalledProcessError as e:
         typer.echo(f"Failed to install service: {e}")
         raise typer.Exit(1)

@@ -12,7 +12,7 @@ HEALTH_URL = "http://127.0.0.1:8090"
 MCP_URL = os.environ.get("MT5_MCP_URL", "http://127.0.0.1:8010")
 PROJECT_DIR = Path(__file__).resolve().parents[2]
 VENV_PYTHON = str(PROJECT_DIR / ".venv" / "bin" / "python")
-SYSTEMD_SERVICE = "mt5-autonomous-agent.service"
+SYSTEMD_SERVICE = "jesse-agent.service"
 JESSE_LOG = "/tmp/jesse.log"
 TCP_BRIDGE_LOG = "/tmp/tcp-bridge.log"
 DATA_DIR = Path.home() / ".mt5-mcp"
@@ -76,7 +76,7 @@ def get_service_status():
     """Check systemd service status. Returns dict with running, active, pid."""
     try:
         result = subprocess.run(
-            ["systemctl", "--user", "is-active", "mt5-jesse"],
+            ["systemctl", "--user", "is-active", "jesse-agent"],
             capture_output=True,
             text=True,
             timeout=5,
@@ -92,7 +92,7 @@ def get_service_status():
         systemd_active = result2.stdout.strip() == "active"
 
         result3 = subprocess.run(
-            ["pgrep", "-f", "autonomous_agent.main"],
+            ["pgrep", "-f", "jesse_agent.main"],
             capture_output=True,
             text=True,
             timeout=5,

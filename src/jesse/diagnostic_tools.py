@@ -77,7 +77,7 @@ def make_diagnostic_tools() -> list:
                     results["fail"] += 1
 
         # 5: Process PIDs
-        agent_pid = _pgrep("autonomous_agent.main")
+        agent_pid = _pgrep("jesse_agent.main")
         bridge_pid = _pgrep("tcp_bridge.main")
         results["checks"]["agent_pid"] = {"running": bool(agent_pid), "pid": agent_pid}
         results["checks"]["bridge_pid"] = {

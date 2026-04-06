@@ -8,7 +8,7 @@ set -uo pipefail
 ###############################################################################
 # Configuration (env vars with sensible defaults)
 ###############################################################################
-PROJECT_DIR="${JESSE_PROJECT_DIR:-/home/ishanp/Documents/GitHub/MT5-mcp}"
+PROJECT_DIR="${JESSE_PROJECT_DIR:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
 VENV_PYTHON="$PROJECT_DIR/.venv/bin/python"
 HEALTH_URL="http://127.0.0.1:8090/health"
 CHECK_INTERVAL="${JESSE_WATCHDOG_INTERVAL:-60}"
@@ -348,7 +348,7 @@ attempt_recovery() {
   fi
 
   # i. Check if Jesse process is alive
-  local jesse_pid; jesse_pid=$(pgrep -f "autonomous_agent.main" 2>/dev/null || true)
+  local jesse_pid; jesse_pid=$(pgrep -f "jesse_agent.main" 2>/dev/null || true)
 
   # j. If alive but unhealthy, kill it
   if [[ -n "$jesse_pid" ]]; then
@@ -361,7 +361,7 @@ attempt_recovery() {
       sleep 5
 
       # Check if still alive
-      if pgrep -f "autonomous_agent.main" >/dev/null 2>&1; then
+      if pgrep -f "jesse_agent.main" >/dev/null 2>&1; then
         log "WARN" "Jesse still alive after SIGTERM. Sending SIGKILL..."
         kill -9 "$jesse_pid" 2>/dev/null || true
         sleep 2
@@ -381,17 +381,17 @@ attempt_recovery() {
     local recovery_success=false
 
     # Try systemctl first
-    if systemctl restart mt5-autonomous-agent 2>/dev/null; then
-      log "INFO" "Restarted Jesse via systemctl (mt5-autonomous-agent)"
+    if systemctl restart jesse-agent 2>/dev/null; then
+      log "INFO" "Restarted Jesse via systemctl (jesse-agent)"
       recovery_success=true
-    elif systemctl restart mt5-jesse 2>/dev/null; then
-      log "INFO" "Restarted Jesse via systemctl (mt5-jesse)"
+    elif systemctl restart jesse-agent 2>/dev/null; then
+      log "INFO" "Restarted Jesse via systemctl (jesse-agent)"
       recovery_success=true
     else
       # Fallback: direct invocation
       log "INFO" "Systemctl services unavailable, starting Jesse directly..."
       if [[ -x "$VENV_PYTHON" ]]; then
-        cd "$PROJECT_DIR" && nohup "$VENV_PYTHON" -m apps.autonomous_agent.main >> /tmp/jesse.log 2>&1 &
+        cd "$PROJECT_DIR" && nohup "$VENV_PYTHON" -m apps.jesse_agent.main >> /tmp/jesse.log 2>&1 &
         local new_pid=$!
         log "INFO" "Started Jesse directly (PID: $new_pid)"
         recovery_success=true

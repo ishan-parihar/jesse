@@ -28,7 +28,7 @@ def _attempt_auto_fixes(svc, attempts_log):
     # Start agent if process not detected
     if not svc["agent_pid"] and (PROJECT_DIR / ".venv" / "bin" / "python").exists():
         subprocess.run(
-            f"cd {PROJECT_DIR} && nohup {VENV_PYTHON} -m apps.autonomous_agent.main > /tmp/jesse.log 2>&1 &",
+            f"cd {PROJECT_DIR} && nohup {VENV_PYTHON} -m apps.jesse_agent.main > /tmp/jesse.log 2>&1 &",
             shell=True,
         )
         time.sleep(3)
@@ -325,7 +325,7 @@ def run(
             ):
                 typer.echo("  Starting agent...")
                 subprocess.run(
-                    f"cd {PROJECT_DIR} && nohup {VENV_PYTHON} -m apps.autonomous_agent.main > /tmp/jesse.log 2>&1 &",
+                    f"cd {PROJECT_DIR} && nohup {VENV_PYTHON} -m apps.jesse_agent.main > /tmp/jesse.log 2>&1 &",
                     shell=True,
                 )
                 time.sleep(3)

@@ -41,7 +41,7 @@ def start(
     typer.echo("Starting Jesse agent...")
     if background:
         subprocess.run(
-            f"cd {PROJECT_DIR} && nohup {VENV_PYTHON} -m apps.autonomous_agent.main > {JESSE_LOG} 2>&1 &",
+            f"cd {PROJECT_DIR} && nohup {VENV_PYTHON} -m apps.jesse_agent.main > {JESSE_LOG} 2>&1 &",
             shell=True,
         )
         time.sleep(3)
@@ -54,7 +54,7 @@ def start(
             )
     else:
         subprocess.run(
-            f"cd {PROJECT_DIR} && {VENV_PYTHON} -m apps.autonomous_agent.main",
+            f"cd {PROJECT_DIR} && {VENV_PYTHON} -m apps.jesse_agent.main",
             shell=True,
         )
 

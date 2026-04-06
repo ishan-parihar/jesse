@@ -61,8 +61,8 @@ def make_gateway_tools(daemon_mgr: Any) -> list:
                 "url": "http://127.0.0.1:8020/bridge/terminal/status",
             },
             "jesse_agent": {
-                "pattern": "autonomous_agent.main",
-                "systemd": "mt5-autonomous-agent.service",
+                "pattern": "jesse_agent.main",
+                "systemd": "jesse-agent.service",
                 "url": "http://127.0.0.1:8090/health",
             },
         }
@@ -90,7 +90,7 @@ def make_gateway_tools(daemon_mgr: Any) -> list:
 
     @tool
     async def gateway_service_start(service_name: str) -> str:
-        """Start a Jesse service by name. Options: mt5-autonomous-agent.service, mt5-tcp-bridge.service, mt5-mcp-server.service, mt5-http-gateway.service."""
+        """Start a Jesse service by name. Options: jesse-agent.service, mt5-tcp-bridge.service, mt5-mcp-server.service, mt5-http-gateway.service."""
         try:
             if hasattr(daemon_mgr, "start"):
                 daemon_mgr.start(service_name)

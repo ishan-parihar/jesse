@@ -24,7 +24,7 @@ set -uo pipefail
 
 # ─── Configuration ────────────────────────────────────────────────────────────
 
-PROJECT_DIR="${PROJECT_DIR:-/home/ishanp/Documents/GitHub/MT5-mcp}"
+PROJECT_DIR="${PROJECT_DIR:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
 DATA_DIR="${HOME}/.mt5-mcp"
 WATCHDOG_DIR="${DATA_DIR}/watchdog"
 
@@ -40,9 +40,9 @@ HTTP_GATEWAY_SERVICE="mt5-http-gateway"
 
 # Python modules that must be importable
 REQUIRED_MODULES=(
-  "mt5_mcp.autonomous.react_agent:JesseAgent"
-  "mt5_mcp.autonomous.mcp_client:MCPClient"
-  "mt5_mcp.autonomous.scheduler:AgentScheduler"
+  "jesse.react_agent:JesseAgent"
+  "jesse.mcp_client:MCPClient"
+  "jesse.scheduler:AgentScheduler"
 )
 
 # Required environment variables: name:required|optional

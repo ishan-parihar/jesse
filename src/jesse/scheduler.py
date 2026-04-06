@@ -222,7 +222,7 @@ class AgentScheduler:
         from jesse.consolidation import consolidate
         from jesse.decay import apply_decay
         from jesse.semantic_memory import SemanticMemory
-        from apps.autonomous_agent.health import update_health
+        from apps.jesse_agent.health import update_health
 
         logger.info("Memory consolidation")
         try:

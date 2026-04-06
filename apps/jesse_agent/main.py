@@ -15,7 +15,7 @@ from typing import Any
 
 import httpx
 
-logger = logging.getLogger("autonomous_agent")
+logger = logging.getLogger("jesse_agent")
 
 _STATE_DIR = Path.home() / ".mt5-mcp"
 _SHUTDOWN_TS = _STATE_DIR / "shutdown-timestamp.json"

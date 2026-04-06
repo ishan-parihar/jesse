@@ -18,7 +18,7 @@ DATA_DIR="$HOME/.mt5-mcp"
 OPENCODE_CONFIG="$HOME/.config/opencode/opencode.json"
 
 info "========================================="
-info "  MT5-MCP Autonomous Agent Installer"
+info "  Jesse Autonomous Agent Installer"
 info "========================================="
 echo
 
@@ -79,16 +79,16 @@ if [[ -f "$OPENCODE_CONFIG" ]]; then
         success "mt5-mcp MCP already configured in opencode.json"
     else
         warn "mt5-mcp MCP not found in opencode.json"
-        info "Add this to the \"mcp\" section of $OPENCODE_CONFIG:"
+        info "Add this to the \"mcp\" section of $OPENCODE_CONFIG (adjust paths to your MT5-MCP installation):"
         cat << 'MCP_BLOCK'
     "mt5-mcp": {
       "type": "local",
       "command": [
         "python",
-        "/home/ishanp/Documents/GitHub/MT5-mcp/tools/mcp_mt5_wrapper.py"
+        "/path/to/MT5-mcp/tools/mcp_mt5_wrapper.py"
       ],
       "environment": {
-        "PYTHONPATH": "/home/ishanp/Documents/GitHub/MT5-mcp/src",
+        "PYTHONPATH": "/path/to/MT5-mcp/src",
         "MCP_HTTP_URL": "http://127.0.0.1:8010",
         "MT5_GATEWAY_URL": "http://127.0.0.1:8020"
       },
@@ -125,27 +125,27 @@ echo
 
 # Step 7: Install systemd service
 info "Step 7: Installing systemd service..."
-SERVICE_FILE="$PROJECT_DIR/deploy/systemd/mt5-autonomous-agent.service"
+SERVICE_FILE="$PROJECT_DIR/deploy/systemd/jesse-agent.service"
 if [[ -f "$SERVICE_FILE" ]]; then
     CURRENT_USER=$(whoami)
-    sed "s/%USER%/$CURRENT_USER/g" "$SERVICE_FILE" > "/tmp/mt5-autonomous-agent.service"
+    sed "s/%USER%/$CURRENT_USER/g" "$SERVICE_FILE" > "/tmp/jesse-agent.service"
     
     if command -v systemctl &>/dev/null; then
         if [[ $EUID -eq 0 ]]; then
-            cp "/tmp/mt5-autonomous-agent.service" /etc/systemd/system/
+            cp "/tmp/jesse-agent.service" /etc/systemd/system/
             systemctl daemon-reload
-            systemctl enable mt5-autonomous-agent
+            systemctl enable jesse-agent
             success "systemd service installed and enabled"
         else
             warn "Run with sudo to install systemd service:"
-            warn "  sudo cp /tmp/mt5-autonomous-agent.service /etc/systemd/system/"
+            warn "  sudo cp /tmp/jesse-agent.service /etc/systemd/system/"
             warn "  sudo systemctl daemon-reload"
-            warn "  sudo systemctl enable mt5-autonomous-agent"
+            warn "  sudo systemctl enable jesse-agent"
         fi
     else
         warn "systemd not available — skip service installation"
     fi
-    rm -f "/tmp/mt5-autonomous-agent.service"
+    rm -f "/tmp/jesse-agent.service"
 else
     warn "Service file not found at $SERVICE_FILE"
 fi
@@ -153,25 +153,25 @@ echo
 
 # Step 8: Verify setup
 info "Step 8: Verifying setup..."
-if "$VENV_DIR/bin/python" -c "from mt5_mcp.autonomous.react_agent import JesseAgent; print('ReAct agent OK')" 2>/dev/null; then
+if "$VENV_DIR/bin/python" -c "from jesse.react_agent import JesseAgent; print('ReAct agent OK')" 2>/dev/null; then
     success "Agent ReAct core compiles successfully"
 else
     error "Agent ReAct core failed to compile — check dependencies"
 fi
 
-if "$VENV_DIR/bin/python" -c "from mt5_mcp.autonomous.mcp_client import MCPClient; print('MCP Client OK')" 2>/dev/null; then
+if "$VENV_DIR/bin/python" -c "from jesse.mcp_client import MCPClient; print('MCP Client OK')" 2>/dev/null; then
     success "MCP client imports successfully"
 else
     error "MCP client import failed"
 fi
 
-if "$VENV_DIR/bin/python" -c "from mt5_mcp.autonomous.semantic_memory import SemanticMemory; print('Memory OK')" 2>/dev/null; then
+if "$VENV_DIR/bin/python" -c "from jesse.semantic_memory import SemanticMemory; print('Memory OK')" 2>/dev/null; then
     success "Semantic memory imports successfully"
 else
     error "Semantic memory import failed"
 fi
 
-if "$VENV_DIR/bin/python" -c "from mt5_mcp.autonomous.scheduler import AgentScheduler; print('Scheduler OK')" 2>/dev/null; then
+if "$VENV_DIR/bin/python" -c "from jesse.scheduler import AgentScheduler; print('Scheduler OK')" 2>/dev/null; then
     success "Scheduler imports successfully"
 else
     error "Scheduler import failed"
@@ -262,12 +262,12 @@ info "To start the autonomous agent:"
 info ""
 info "  1. Ensure MT5-MCP services are running (ports 8010, 8020, 8025)"
 info "  2. Start the agent:"
-info "     $VENV_DIR/bin/python -m apps.autonomous_agent.main"
+info "     $VENV_DIR/bin/python -m apps.jesse_agent.main"
 info ""
-if command -v systemctl &>/dev/null && [[ -f /etc/systemd/system/mt5-autonomous-agent.service ]]; then
+if command -v systemctl &>/dev/null && [[ -f /etc/systemd/system/jesse-agent.service ]]; then
     info "  Or via systemd:"
-    info "     sudo systemctl start mt5-autonomous-agent"
-    info "     sudo journalctl -u mt5-autonomous-agent -f"
+    info "     sudo systemctl start jesse-agent"
+    info "     sudo journalctl -u jesse-agent -f"
 fi
 echo
 info "Watchdog (self-healing monitor):"
