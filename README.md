@@ -96,3 +96,5 @@ curl http://127.0.0.1:8090/health
 ## License
 
 MIT
+---
+Developed by [Ishan Parihar](https://github.com/ishan-parihar) — If you find this useful, [consider supporting](https://rzp.io/rzp/ishan-parihar)
